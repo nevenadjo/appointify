@@ -1,0 +1,1 @@
+ALTER TABLE "Business" ADD COLUMN "acceptsCards" BOOLEAN NOT NULL DEFAULT false;

@@ -1,0 +1,283 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  OWNER
+  CLIENT
+}
+
+enum ReservationStatus {
+  CONFIRMED
+  COMPLETED
+  NO_SHOW
+  CANCELED
+}
+
+enum ReservationSource {
+  ONLINE
+  MANUAL
+}
+
+model User {
+  id String @id @default(cuid())
+
+  name String?
+
+  email String @unique
+
+  passwordHash String?
+
+  image String?
+  phone String?
+
+  role Role @default(CLIENT)
+
+  isEmailVerified Boolean @default(false)
+  emailVerified DateTime?
+
+  accounts Account[]
+  sessions Session[]
+
+  businesses Business[]
+  reservations Reservation[]
+  reviews Review[]
+  favorites Favorite[]
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id String @id @default(cuid())
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type String
+  provider String
+  providerAccountId String
+
+  refresh_token String?
+  access_token String?
+  expires_at Int?
+  token_type String?
+  scope String?
+  id_token String?
+  session_state String?
+
+  createdAt DateTime @default(now())
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id String @id @default(cuid())
+
+  sessionToken String @unique
+  userId String
+  expires DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id String @id @default(cuid())
+
+  name String  @unique
+  icon String?
+
+  businesses Business[]
+}
+
+model Business {
+  id String @id @default(cuid())
+
+  publicId String @unique
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  name String
+
+  description String?
+
+  address String
+
+  cityId String
+  city   City @relation(fields: [cityId], references: [id])
+
+  phone String?
+  email String?
+
+  isActive Boolean @default(true)
+  isSuspended Boolean @default(false)
+  acceptsCards Boolean @default(false)
+
+  latitude  Float?
+  longitude Float?
+
+  images BusinessImage[]
+
+  services Service[]
+
+  workingHours WorkingHour[]
+
+  reservations Reservation[]
+
+  reviews Review[]
+
+  favorites Favorite[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BusinessImage {
+  id String @id @default(cuid())
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  imageUrl String
+
+  createdAt DateTime @default(now())
+}
+
+model WorkingHour {
+  id String @id @default(cuid())
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  dayOfWeek Int
+
+  isOpen Boolean @default(true)
+
+  startTime String?
+  endTime String?
+
+  breakStart String?
+  breakEnd String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([businessId, dayOfWeek])
+}
+
+model City {
+  id String @id @default(cuid())
+
+  name String @unique
+
+  businesses Business[]
+}
+
+model Service {
+  id String @id @default(cuid())
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  name String
+
+  description String?
+
+  duration Int
+
+  price Float
+
+  color String?
+
+  isActive Boolean @default(true)
+
+  reservations Reservation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Reservation {
+  id String @id @default(cuid())
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id])
+
+  serviceId String?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  startTime DateTime
+  endTime   DateTime
+
+  status ReservationStatus @default(CONFIRMED)
+
+  source ReservationSource @default(ONLINE)
+
+  notes String?
+
+  completedAt DateTime?
+
+  completedBy String?
+
+  autoCompleted Boolean @default(false)
+
+  cancellationReason String?
+
+  reminderSent Boolean @default(false)
+  reviewReminderSent Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  review    Review?
+}
+
+model Review {
+  id String @id @default(cuid())
+
+  reservationId String      @unique
+  reservation   Reservation @relation(fields: [reservationId], references: [id])
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  rating Int
+  serviceRating Int?
+  cleanlinessRating Int?
+  valueRating Int?
+  punctualityRating Int?
+
+  comment String?
+
+  createdAt DateTime @default(now())
+}
+
+model Favorite {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, businessId])
+}

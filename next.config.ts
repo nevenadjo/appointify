@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  experimental: {
+    serverActions: {
+      // Allow the existing 5 MB image limit plus multipart/form fields.
+      bodySizeLimit: "6mb",
+    },
+  },
 };
 
 export default nextConfig;

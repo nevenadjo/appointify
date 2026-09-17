@@ -24,3 +24,52 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.modal-scroll-area {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107, 114, 128, 0.45) transparent;
+  -ms-overflow-style: auto;
+}
+
+.modal-scroll-area::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-scroll-area::-webkit-scrollbar-thumb {
+  background-color: rgba(107, 114, 128, 0.45);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.modal-scroll-area:hover {
+  scrollbar-color: rgba(75, 85, 99, 0.68) transparent;
+}
+
+.modal-scroll-area:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(75, 85, 99, 0.68);
+}
+
+/* Shared native dropdown arrow; background artwork cannot intercept clicks. */
+select:not([multiple]):not([size]),
+select:not([multiple])[size="1"] {
+  appearance: none;
+  padding-right: 2.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem 1rem;
+}
+
+/* Let the browser provide a visible arrow in high-contrast mode. */
+@media (forced-colors: active) {
+  select:not([multiple]):not([size]),
+  select:not([multiple])[size="1"] {
+    appearance: auto;
+    background-image: none;
+  }
+}
