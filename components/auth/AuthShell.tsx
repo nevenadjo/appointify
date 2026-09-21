@@ -12,7 +12,9 @@ export default function AuthShell({ children }: { children: ReactNode }) {
         <div className="min-w-0 border-b border-gray-100 pb-6 text-center md:flex md:flex-col md:justify-start md:border-r md:border-b-0 md:pt-1 md:pr-10 md:pb-0 md:text-left lg:pr-14">
           <p className="text-2xl font-semibold tracking-tight sm:text-[28px]">Appointify<span className="text-[#9993c6]">.</span></p>
           <p className="mx-auto mt-3 max-w-64 text-sm leading-6 text-gray-500 md:mx-0 md:text-base md:leading-7">
-            All your appointments, all in one place.
+            All your appointments, all in one place. <a href="/" className={authLinkClass}>
+              Explore↗
+            </a>
           </p>
           <div className="mt-4 hidden md:block">
             <Image
