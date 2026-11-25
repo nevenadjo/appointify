@@ -1,4 +1,4 @@
-# Appointify
+# Appointify - Next.js
 
 ## Category seeding
 
