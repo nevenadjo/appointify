@@ -1,5 +1,7 @@
 # Appointify - Next.js
 
+A full-stack web application that allows users to discover local businesses, browse their services, and book appointments online, while providing business owners with tools to manage their profiles, services, working hours, reservations, and customer reviews.
+
 ## Category seeding
 
 To create or update only the categories:
